@@ -42,6 +42,7 @@ const book10 = new Book(
 // Array
 
 let myLibrary = [];
+// let i = 1;
 
 // Constructor
 
@@ -50,7 +51,13 @@ function Book(title, author, pages, read) {
     (this.author = author),
     (this.pages = pages),
     (this.read = read),
-    (this.info = title + " by " + author + ", " + pages + " pages, " + read);
+    (this.info = title + " by " + author + ", " + pages + " pages, " + read),
+    (this.id = idNumber());
+}
+
+function idNumber() {
+  let i = 1;
+  this.id = i++;
 }
 
 //Push to Array
@@ -97,46 +104,95 @@ function displayBooks() {
     let newReadCell = newRow.insertCell(3);
     let newReadText = document.createTextNode(`${book.read}`);
     newReadCell.appendChild(newReadText);
+
+    let newDeleteCell = newRow.insertCell(4);
+    let newDeleteBtn = document.createElement("button");
+    newDeleteBtn.setAttribute("data-key", `${myLibrary.indexOf(book)}`);
+
+    newDeleteBtn.innerText = `${newDeleteBtn.getAttribute("data-key")}`;
+    // newDeleteBtn.innerText = `${newDeleteBtn.getAttribute("delete")}`;
+    newDeleteCell.appendChild(newDeleteBtn);
+  });
+}
+
+function clearTable() {
+  myLibrary.forEach((book) => {
+    document.getElementById("books-table").deleteRow(-1);
   });
 }
 
 displayBooks();
 
-// Add
-
-/*
-
-When NEW BOOK button is pressed:
-
-- Hide NEW BOOK button
-- Show form-row
-- Show Cancel Button
-- Show Submit Button
-
-*/
-
 let isHidden = true;
-document.getElementById("form-row").style.display = "none";
+// document.getElementById("form-row").style.display = "none";
 
 const newBookBtn = document.querySelector(".new-book-btn");
+const submitBtn = document.querySelector(".submit");
+const cancelBtn = document.querySelector(".cancel");
 const formRow = document.getElementById("form-row");
 
-newBookBtn.addEventListener("click", newBook);
+newBookBtn.style.display = "";
+submitBtn.style.display = "none";
+cancelBtn.style.display = "none";
+formRow.style.display = "none";
 
-function newBook() {
-  if (isHidden === true) {
-    showForm();
-  } else if (isHidden === false) {
-    hideForm();
-  }
-}
+newBookBtn.addEventListener("click", showForm);
+cancelBtn.addEventListener("click", hideForm);
+submitBtn.addEventListener("click", submit);
+
+// function newBook() {
+//   if (isHidden === true) {
+//     showForm();
+//   } else if (isHidden === false) {
+//     hideForm();
+//   }
+// }
 
 function showForm() {
   formRow.style.display = "";
+  newBookBtn.style.display = "none";
+  submitBtn.style.display = "";
+  cancelBtn.style.display = "";
   isHidden = false;
 }
 
 function hideForm() {
   formRow.style.display = "none";
+  newBookBtn.style.display = "";
+  submitBtn.style.display = "none";
+  cancelBtn.style.display = "none";
   isHidden = true;
+}
+
+let userTitle = document.querySelector("#title");
+let userAuthor = document.querySelector("#author");
+let userPages = document.querySelector("#pages");
+let userRead = document.querySelector("#read-yes");
+let userNotRead = document.querySelector("#read-no");
+
+function hasRead() {
+  if (userRead.checked === true) {
+    return "has read!";
+  } else if (userNotRead.checked === true) {
+    return "has not read!";
+  } else return;
+}
+
+function submit() {
+  let newBook = new Book(
+    `${userTitle.value}`,
+    `${userAuthor.value}`,
+    `${userPages.value}`,
+    `${hasRead()}`,
+    `${(this.id = idNumber())}`
+  );
+  clearTable();
+  // myLibrary.length = 0;
+  myLibrary.push(newBook);
+  addBookToLibrary();
+  displayBooks();
+}
+
+function cancel() {
+  hideForm();
 }
