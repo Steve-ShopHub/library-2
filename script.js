@@ -47,13 +47,25 @@ let myLibrary = [];
 // Constructor
 
 function Book(title, author, pages, read) {
+  // let i = 1;
   (this.title = title),
     (this.author = author),
     (this.pages = pages),
     (this.read = read),
     (this.info = title + " by " + author + ", " + pages + " pages, " + read),
-    (this.id = idNumber());
+    (this.id = function uniqueId() {
+      let counter = 0;
+
+      return function () {
+        return counter++;
+      };
+    });
 }
+
+// Book.prototype.id = function () {
+//   let i = 3;
+//   i++;
+// };
 
 function idNumber() {
   let i = 1;
@@ -87,7 +99,7 @@ function displayBooks() {
   myLibrary.forEach((book) => {
     const tableRef = document.getElementById("books-table");
 
-    const newRow = tableRef.insertRow(1);
+    const newRow = tableRef.insertRow(-1);
 
     let newTitleCell = newRow.insertCell(0);
     let newTitleText = document.createTextNode(`${book.title}`);
@@ -129,12 +141,12 @@ let isHidden = true;
 const newBookBtn = document.querySelector(".new-book-btn");
 const submitBtn = document.querySelector(".submit");
 const cancelBtn = document.querySelector(".cancel");
-const formRow = document.getElementById("form-row");
+const form = document.querySelector(".new-book-form");
 
 newBookBtn.style.display = "";
 submitBtn.style.display = "none";
 cancelBtn.style.display = "none";
-formRow.style.display = "none";
+form.style.display = "none";
 
 newBookBtn.addEventListener("click", showForm);
 cancelBtn.addEventListener("click", hideForm);
@@ -149,7 +161,7 @@ submitBtn.addEventListener("click", submit);
 // }
 
 function showForm() {
-  formRow.style.display = "";
+  form.style.display = "";
   newBookBtn.style.display = "none";
   submitBtn.style.display = "";
   cancelBtn.style.display = "";
@@ -157,7 +169,7 @@ function showForm() {
 }
 
 function hideForm() {
-  formRow.style.display = "none";
+  form.style.display = "none";
   newBookBtn.style.display = "";
   submitBtn.style.display = "none";
   cancelBtn.style.display = "none";
@@ -184,7 +196,7 @@ function submit() {
     `${userAuthor.value}`,
     `${userPages.value}`,
     `${hasRead()}`,
-    `${(this.id = idNumber())}`
+    `${(this.id = myLibrary.indexOf(this))}`
   );
   clearTable();
   // myLibrary.length = 0;
