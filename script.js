@@ -62,11 +62,6 @@ function Book(title, author, pages, read) {
     });
 }
 
-// Book.prototype.id = function () {
-//   let i = 3;
-//   i++;
-// };
-
 function idNumber() {
   let i = 1;
   this.id = i++;
@@ -99,7 +94,12 @@ function displayBooks() {
   myLibrary.forEach((book) => {
     const tableRef = document.getElementById("books-table");
 
-    const newRow = tableRef.insertRow(-1);
+    // const newRow = tableRef.insertRow(-1);
+
+    const newRow = document.createElement("tr");
+    newRow.setAttribute("data-key", `${myLibrary.indexOf(book)}`);
+    tableRef.appendChild(newRow);
+    // alert(newRow.getAttribute("data-key"));
 
     let newTitleCell = newRow.insertCell(0);
     let newTitleText = document.createTextNode(`${book.title}`);
@@ -119,10 +119,12 @@ function displayBooks() {
 
     let newDeleteCell = newRow.insertCell(4);
     let newDeleteBtn = document.createElement("button");
-    newDeleteBtn.setAttribute("data-key", `${myLibrary.indexOf(book)}`);
+    newDeleteBtn.addEventListener("click", deleteSelectedRow);
+    // newDeleteBtn.setAttribute("data-key", `${myLibrary.indexOf(book)}`);
+    newDeleteBtn.setAttribute("data-key", `${newRow.getAttribute("data-key")}`);
 
-    newDeleteBtn.innerText = `${newDeleteBtn.getAttribute("data-key")}`;
-    // newDeleteBtn.innerText = `${newDeleteBtn.getAttribute("delete")}`;
+    // newDeleteBtn.innerText = `${newDeleteBtn.getAttribute("data-key")}`;
+    newDeleteBtn.innerText = `Delete`;
     newDeleteCell.appendChild(newDeleteBtn);
   });
 }
@@ -131,6 +133,18 @@ function clearTable() {
   myLibrary.forEach((book) => {
     document.getElementById("books-table").deleteRow(-1);
   });
+}
+
+function deleteSelectedRow() {
+  let buttonKey = this.getAttribute("data-key");
+  const tableRef = document.getElementById("books-table");
+
+  for (let i in tableRef.rows) {
+    let row = tableRef.rows[i];
+    if (row.getAttribute("data-key") == buttonKey) {
+      tableRef.removeChild(row);
+    }
+  }
 }
 
 displayBooks();
