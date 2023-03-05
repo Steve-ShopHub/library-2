@@ -11,108 +11,101 @@ const book3 = new Book(
   "180",
   "has not read"
 );
-// const book4 = new Book(
-//   "The Catcher in the Rye",
-//   "J.D. Salinger",
-//   "224",
-//   "has not read"
-// );
-// const book5 = new Book("Pride and Prejudice", "Jane Austen", "432", "has read");
-// const book6 = new Book(
-//   "Harry Potter and the Philosopher's Stone",
-//   "J.K. Rowling",
-//   "223",
-//   "has not read"
-// );
-// const book7 = new Book(
-//   "The Lord of the Rings: The Fellowship of the Ring",
-//   "J.R.R. Tolkien",
-//   "458",
-//   "has read"
-// );
-// const book8 = new Book("The Hobbit", "J.R.R. Tolkien", "300", "has not read");
-// const book9 = new Book("Animal Farm", "George Orwell", "112", "has not read");
-// const book10 = new Book(
-//   "Crime and Punishment",
-//   "Fyodor Dostoevsky",
-//   "545",
-//   "has read"
-// );
+
+class Book {
+  constructor(title, author, pages, read) {
+    (this.title = title),
+      (this.author = author),
+      (this.pages = pages),
+      (this.read = read);
+  }
+
+  info() {
+    return title + " by " + author + ", " + pages + " pages, " + read;
+  }
+}
+
+
+
+const tableRef = document.getElementById("books-table");
+
+class Row {
+    constructor(){
+      
+    }
+
+    createRow(){
+        document.createElement("tr");
+        this.setAttribute("data-key", `${myLibrary.indexOf(book)}`);
+        tableRef.appendChild(this);
+        this.createCells()
+    }
+
+    createCells(){
+        let newTitleCell = newRow.insertCell(0);
+        let newTitleText = document.createTextNode(`${book.title}`);
+        newTitleCell.appendChild(newTitleText);
+
+        let newAuthorCell = newRow.insertCell(1);
+        let newAuthorText = document.createTextNode(`${book.author}`);
+        newAuthorCell.appendChild(newAuthorText);
+    
+        let newPagesCell = newRow.insertCell(2);
+        let newPagesText = document.createTextNode(`${book.pages}`);
+        newPagesCell.appendChild(newPagesText);
+    
+        let newReadCell = newRow.insertCell(3);
+        let newReadText = document.createTextNode(`${book.read}`);
+        newReadCell.appendChild(newReadText);
+    
+        let newDeleteCell = newRow.insertCell(4);
+        let newDeleteBtn = document.createElement("button");
+        newDeleteBtn.addEventListener("click", deleteSelectedRow);
+        newDeleteBtn.setAttribute("data-key", `${newRow.getAttribute("data-key")}`);
+    
+        newDeleteBtn.innerText = `Delete`;
+        newDeleteCell.appendChild(newDeleteBtn);
+      });
+    }
+
+
+
+
+}
+
+class bookTable {
+    constructor(){
+    }
+
+
+
+
+
+
+}
+
+///////////// To be completed
 
 let myLibrary = [];
 
-function Book(title, author, pages, read) {
-  (this.title = title),
-    (this.author = author),
-    (this.pages = pages),
-    (this.read = read),
-    (this.info = title + " by " + author + ", " + pages + " pages, " + read),
-    (this.id = function uniqueId() {
-      let counter = 0;
-
-      return function () {
-        return counter++;
-      };
-    });
+class myLibrary {
+    
+    static addBookToLibrary() {
+        myLibrary.push(book1, book2, book3);
+      }
 }
 
-function idNumber() {
-  let i = 1;
-  this.id = i++;
-}
-
-function addBookToLibrary(...books) {
-  myLibrary.push(...books);
-}
-
-addBookToLibrary(
-  book1,
-  book2,
-  book3
-  // book4,
-  // book5,
-  // book6,
-  // book7,
-  // book8,
-  // book9,
-  // book10
-);
+// addBookToLibrary(book1, book2, book3);
 
 console.log(myLibrary);
-
-function displayBooks() {
-  const tableRef = document.getElementById("books-table");
-
-  myLibrary.forEach((book, index) => {
-    const newRow = document.createElement("tr");
-    newRow.dataset.key = index;
-    tableRef.appendChild(newRow);
-
-    newRow.insertCell().textContent = book.title;
-    newRow.insertCell().textContent = book.author;
-    newRow.insertCell().textContent = book.pages;
-    newRow.insertCell().textContent = book.read;
-
-    const newDeleteBtn = document.createElement("button");
-    newDeleteBtn.dataset.key = index;
-    newDeleteBtn.textContent = "Delete";
-    newDeleteBtn.addEventListener("click", deleteSelectedRow);
-    newRow.insertCell().appendChild(newDeleteBtn);
-  });
-}
-
-/*
 
 function displayBooks() {
   myLibrary.forEach((book) => {
     const tableRef = document.getElementById("books-table");
 
-    // const newRow = tableRef.insertRow(-1);
-
     const newRow = document.createElement("tr");
     newRow.setAttribute("data-key", `${myLibrary.indexOf(book)}`);
     tableRef.appendChild(newRow);
-    // alert(newRow.getAttribute("data-key"));
 
     let newTitleCell = newRow.insertCell(0);
     let newTitleText = document.createTextNode(`${book.title}`);
@@ -133,16 +126,12 @@ function displayBooks() {
     let newDeleteCell = newRow.insertCell(4);
     let newDeleteBtn = document.createElement("button");
     newDeleteBtn.addEventListener("click", deleteSelectedRow);
-    // newDeleteBtn.setAttribute("data-key", `${myLibrary.indexOf(book)}`);
     newDeleteBtn.setAttribute("data-key", `${newRow.getAttribute("data-key")}`);
 
-    // newDeleteBtn.innerText = `${newDeleteBtn.getAttribute("data-key")}`;
     newDeleteBtn.innerText = `Delete`;
     newDeleteCell.appendChild(newDeleteBtn);
   });
 }
-
-*/
 
 function clearTable() {
   myLibrary.forEach((book) => {
@@ -168,19 +157,18 @@ displayBooks();
 let isHidden = true;
 
 const newBookBtn = document.querySelector(".new-book-btn");
-newBookBtn.addEventListener("click", showForm);
-newBookBtn.style.display = "";
-
 const submitBtn = document.querySelector(".submit");
-submitBtn.addEventListener("click", submit);
-submitBtn.style.display = "none";
-
 const cancelBtn = document.querySelector(".cancel");
-cancelBtn.addEventListener("click", hideForm);
-cancelBtn.style.display = "none";
-
 const form = document.querySelector(".new-book-form");
+
+newBookBtn.style.display = "";
+submitBtn.style.display = "none";
+cancelBtn.style.display = "none";
 form.style.display = "none";
+
+newBookBtn.addEventListener("click", showForm);
+cancelBtn.addEventListener("click", hideForm);
+submitBtn.addEventListener("click", submit);
 
 function showForm() {
   form.style.display = "";
@@ -217,11 +205,10 @@ function submit() {
     `${userTitle.value}`,
     `${userAuthor.value}`,
     `${userPages.value}`,
-    `${hasRead()}`
-    // `${(this.id = myLibrary.indexOf(this))}`
+    `${hasRead()}`,
+    `${(this.id = myLibrary.indexOf(this))}`
   );
   clearTable();
-  // myLibrary.length = 0;
   myLibrary.push(newBook);
   addBookToLibrary();
   displayBooks();
